@@ -11,15 +11,49 @@
 
         $(function(){
             $("#start_recording").click(function(){
-                CameraTag.photobooths["myPhotobooth"].takePhoto();
+                // Set the date we're counting down to
+                var t = new Date();
+                t.setSeconds(t.getSeconds() + 5);
+                var countDownDate = t.getTime();
+
+                // Update the count down every 1 second
+                var x = setInterval(function() {
+
+                    // Get today's date and time
+                    var now = new Date().getTime();
+
+                    // Find the distance between now and the count down date
+                    var distance = countDownDate - now;
+
+                    // Time calculations for days, hours, minutes and seconds
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    // Output the result in an element with id="countdown"
+                    document.getElementById("countdown").innerHTML = seconds;
+
+                    // If the count down is over, write some text
+                    if (distance < 0) {
+                        clearInterval(x);
+                        document.getElementById("countdown").innerHTML = "";
+                        CameraTag.photobooths["myPhotobooth"].takePicture();
+                    }
+                }, 1000);
             })
         })
     </script>
 
 </head>
 <body>
-<button id="start_recording">TAKE A PHOTO</button>
-<photobooth data-app-id='a-6f2af130-0f1d-0139-4ed2-025c64289059' id='myPhotobooth'></photobooth>
+
+<div>
+    <button id="start_recording">TAKE A PHOTO</button>
+</div>
+
+<div>
+    <photobooth data-app-id='a-6f2af130-0f1d-0139-4ed2-025c64289059' id='myPhotobooth' data-height="500" data-width="500"></photobooth>
+</div>
+
+<div id="countdown"/>
 
 </body>
 </html>
