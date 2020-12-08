@@ -4,6 +4,29 @@
     <script src='https://code.jquery.com/jquery-2.1.4.min.js' type='text/javascript'></script>
     <script src='//cameratag.com/api/v14/js/cameratag.min.js' type='text/javascript'></script>
     <link rel='stylesheet' href='//cameratag.com/static/14/cameratag.css'></link>
+    <style>
+        body {
+            font-family: "Raleway","Helvetica Neue Light","Helvetica Neue","Helvetica","Arial",sans-serif;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .blocky {
+            display: block;
+            width: 80%;
+            border: none;
+            background-color: #e62f79;
+            color: white;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+        }
+    </style>
 
     <script>
         CameraTag.observe("myPhotobooth", "initialized", function () {
@@ -12,6 +35,10 @@
 
         $(function () {
             $("#start_recording").click(function () {
+
+                CameraTag.photobooths["myPhotobooth"].reset();
+                CameraTag.photobooths["myPhotobooth"].connect();
+
                 // Set the date we're counting down to
                 var t = new Date();
                 t.setSeconds(t.getSeconds() + 6);
@@ -30,12 +57,12 @@
                     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
                     // Output the result in an element with id="countdown"
-                    document.getElementById("countdown").innerHTML = seconds;
+                    document.getElementById("start_recording").innerHTML = seconds;
 
                     // If the count down is over, write some text
                     if (distance < 0) {
                         clearInterval(x);
-                        document.getElementById("countdown").innerHTML = "";
+                        document.getElementById("start_recording").innerHTML = "TAKE A PHOTO";
                         CameraTag.photobooths["myPhotobooth"].takePicture();
                     }
                 }, 1000);
@@ -48,17 +75,24 @@
 
 <h1>Add your photo</h1>
 <div>
-    <button id="start_recording">TAKE A PHOTO</button>
+    <ol>
+        <li>Allow access to your camera</li>
+        <li>Listen for the name of the pose</li>
+        <li>When you are ready, click the 'take a photo' button to get a 5 second countdown</li>
+        <li>(or click the red circle to take one immediately)</li>
+        <li>Optionally apply filters using 'Image adjustments / filters'</li>
+        <li>Hit the 'Save' button to upload your photo</li>
+    </ol>
 </div>
 
-Time left:
-<div id="countdown"></div>
-
-<div>
+<div class="center">
     <photobooth data-app-id='a-6f2af130-0f1d-0139-4ed2-025c64289059' id='myPhotobooth' data-height="500"
                 data-width="750"></photobooth>
 </div>
 
+<div class="center">
+    <button id="start_recording" class="blocky">TAKE A PHOTO</button>
+</div>
 
 </body>
 </html>
